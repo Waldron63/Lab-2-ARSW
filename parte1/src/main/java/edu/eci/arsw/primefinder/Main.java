@@ -3,11 +3,12 @@ package edu.eci.arsw.primefinder;
 import edu.eci.arsw.primefinder.PrimeFinderThread;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, IOException {
 
 		PrimeFinderThread pft = new PrimeFinderThread(0, 10000000);
 		PrimeFinderThread pft2 = new PrimeFinderThread(10000000, 20000000);
