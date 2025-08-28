@@ -1,23 +1,45 @@
-Escuela Colombiana de Ingeniería
+### Escuela Colombiana de Ingeniería
+### Arquitecturas de Software - ARSW 2025-2
+### Taller – programación concurrente, condiciones de carrera y sincronización de hilos. EJERCICIO INDIVIDUAL O EN PAREJAS.
 
-Arquitecturas de Software – ARSW
+## Integrantes:
+### Juan David Martínez Mendez
+### Santiago Gualdrón Rincón
 
-####Taller – programación concurrente, condiciones de carrera y sincronización de hilos. EJERCICIO INDIVIDUAL O EN PAREJAS.
-
-#####Parte I – Antes de terminar la clase.
+## Parte I – Antes de terminar la clase.
 
 Creación, puesta en marcha y coordinación de hilos.
 
 1. Revise el programa “primos concurrentes” (en la carpeta parte1), dispuesto en el paquete edu.eci.arsw.primefinder. Este es un programa que calcula los números primos entre dos intervalos, distribuyendo la búsqueda de los mismos entre hilos independientes. Por ahora, tiene un único hilo de ejecución que busca los primos entre 0 y 30.000.000. Ejecútelo, abra el administrador de procesos del sistema operativo, y verifique cuantos núcleos son usados por el mismo.
 
+En la primera imagen se muestra como el nucleoal parecer que se utiliza con mayor frecuencia es el sexto (6) y el menos utilizado es el primero (1)
+<img width="1451" height="889" alt="Captura de pantalla 2025-08-28 174557" src="https://github.com/user-attachments/assets/d1e1c9a6-a6b1-4db0-b670-28b4905f83f5" />
+
+Una vez finalizada la tarea, todos los procesadores se estabilizan, mostrando como la tarea fue finalizada y el hilo termino.
+<img width="1455" height="886" alt="image" src="https://github.com/user-attachments/assets/ce62ea63-45c7-4595-abb2-15307476b97b" />
+
 2. Modifique el programa para que, en lugar de resolver el problema con un solo hilo, lo haga con tres, donde cada uno de éstos hará la tarcera parte del problema original. Verifique nuevamente el funcionamiento, y nuevamente revise el uso de los núcleos del equipo.
+
+Ahora, en comparación al anterior, se muestra como todos los procesadores tienen picos mayores al anterior punto, teniendo un mayor uso el tercero (3), y el menor uso el primero (1)
+<img width="1582" height="876" alt="image" src="https://github.com/user-attachments/assets/e8d6a071-84b5-455b-90a5-2a921d5744bf" />
+
+Nuevamente, se muestra como los procesadores bajan los picos en el momento en que se finalizan los 3 hilos.
+<img width="1584" height="874" alt="image" src="https://github.com/user-attachments/assets/c16a48e1-2a92-4331-9fcf-fb0d2de83bd9" />
 
 3. Lo que se le ha pedido es: debe modificar la aplicación de manera que cuando hayan transcurrido 5 segundos desde que se inició la ejecución, se detengan todos los hilos y se muestre el número de primos encontrados hasta el momento. Luego, se debe esperar a que el usuario presione ENTER para reanudar la ejecución de los mismo.
 
+Se muestra como, todos los hilos paran a los 5 segundos, los picos de los procesadores vuelven a bajar y el resultado que se ha calculado hasta el momento de la sumatoria de los primos alcanzados; esperando a que se reanude con un ENTER.
+<img width="1709" height="797" alt="image" src="https://github.com/user-attachments/assets/ac4b0cae-9224-44e9-8e50-dcb0b76102d0" />
+
+Prueba 2:
+<img width="1740" height="877" alt="image" src="https://github.com/user-attachments/assets/ac49355e-db26-4136-97b0-b76dcd38caaf" />
 
 
-#####Parte II 
+Prueba 3:
+<img width="1733" height="874" alt="image" src="https://github.com/user-attachments/assets/0c7a196c-d39e-4833-99fa-b453f36bdcb0" />
 
+
+## Parte II 
 
 Para este ejercicio se va a trabajar con un simulador de carreras de galgos (carpeta parte2), cuya representación gráfica corresponde a la siguiente figura:
 
