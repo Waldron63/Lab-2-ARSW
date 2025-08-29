@@ -41,59 +41,51 @@ Prueba 3:
 
 ## Parte II 
 
-Para este ejercicio se va a trabajar con un simulador de carreras de galgos (carpeta parte2), cuya representación gráfica corresponde a la siguiente figura:
+1. Al ejecutar el programa tenemos que el ganador se muestra sin siquiera haber terminado la carrera, utilizando join aplicado a cada uno de los hilos "galgos", podemos lograr que la respuesta se de apenas todos terminen.
 
-![](./img/media/image1.png)
+Antes:
 
-En la simulación, todos los galgos tienen la misma velocidad (a nivel de programación), por lo que el galgo ganador será aquel que (por cuestiones del azar) haya sido más beneficiado por el *scheduling* del
-procesador (es decir, al que más ciclos de CPU se le haya otorgado durante la carrera). El modelo de la aplicación es el siguiente:
+<img width="770" height="566" alt="image" src="https://github.com/user-attachments/assets/b7a68ac1-99e8-4bd4-963b-48d1d936c0e4" />
 
-![](./img/media/image2.png)
+Después:
 
-Como se observa, los galgos son objetos ‘hilo’ (Thread), y el avance de los mismos es visualizado en la clase Canodromo, que es básicamente un formulario Swing. Todos los galgos (por defecto son 17 galgos corriendo en una pista de 100 metros) comparten el acceso a un objeto de tipo
-RegistroLLegada. Cuando un galgo llega a la meta, accede al contador ubicado en dicho objeto (cuyo valor inicial es 1), y toma dicho valor como su posición de llegada, y luego lo incrementa en 1. El galgo que
-logre tomar el ‘1’ será el ganador.
-
-Al iniciar la aplicación, hay un primer error evidente: los resultados (total recorrido y número del galgo ganador) son mostrados antes de que finalice la carrera como tal. Sin embargo, es posible que una vez corregido esto, haya más inconsistencias causadas por la presencia de condiciones de carrera.
-
-Taller.
-
-1.  Corrija la aplicación para que el aviso de resultados se muestre
-    sólo cuando la ejecución de todos los hilos ‘galgo’ haya finalizado.
-    Para esto tenga en cuenta:
-
-    a.  La acción de iniciar la carrera y mostrar los resultados se realiza a partir de la línea 38 de MainCanodromo.
-
-    b.  Puede utilizarse el método join() de la clase Thread para sincronizar el hilo que inicia la carrera, con la finalización de los hilos de los galgos.
-
-2.  Una vez corregido el problema inicial, corra la aplicación varias
-    veces, e identifique las inconsistencias en los resultados de las
-    mismas viendo el ‘ranking’ mostrado en consola (algunas veces
-    podrían salir resultados válidos, pero en otros se pueden presentar
-    dichas inconsistencias). A partir de esto, identifique las regiones
-    críticas () del programa.
-
-3.  Utilice un mecanismo de sincronización para garantizar que a dichas
-    regiones críticas sólo acceda un hilo a la vez. Verifique los
-    resultados.
-
-4.  Implemente las funcionalidades de pausa y continuar. Con estas,
-    cuando se haga clic en ‘Stop’, todos los hilos de los galgos
-    deberían dormirse, y cuando se haga clic en ‘Continue’ los mismos
-    deberían despertarse y continuar con la carrera. Diseñe una solución que permita hacer esto utilizando los mecanismos de sincronización con las primitivas de los Locks provistos por el lenguaje (wait y notifyAll).
+<img width="781" height="731" alt="image" src="https://github.com/user-attachments/assets/d02a2905-4c9c-4ca6-838c-2a9eff943a45" />
 
 
-## Criterios de evaluación
 
-1. Funcionalidad.
+2.  Al ejecutar el programa, podemos tener resultados como:
 
-    1.1. La ejecución de los galgos puede ser detenida y resumida consistentemente.
-    
-    1.2. No hay inconsistencias en el orden de llegada registrado.
-    
-2. Diseño.   
+* Varios galgos con puestos repetidos
+* La consola muestra el ranking de manera desorganizada
 
-    2.1. Se hace una sincronización de sólo la región crítica (sincronizar, por ejemplo, todo un método, bloquearía más de lo necesario).
-    
-    2.2. Los galgos, cuando están suspendidos, son reactivados son sólo un llamado (usando un monitor común).
+Esto lo podemos evidenciar en la siguiente imágen
+
+<img width="688" height="313" alt="image" src="https://github.com/user-attachments/assets/35b68af0-e1b1-44ad-a70c-f7583ced9625" />
+
+La región crítica del código es la forma en como los Galgos registran su llegada en el objeto "RegistroLlegada", como cambian la última posición alcanzada y definen el ganador, por lo que es una zona importante de sincronizar para evitar los errores mencionados.
+
+3.  Para solucionar los problemas anteriormente mencionados, definimos la variable "ultimaPosicionAlcanzada" como estática y sincronizamos los métodos "setGanador", y el get y set de la última Posición Alcanzada, también sincronizamos la forma en como se registran los galgos al iniciar el método "corra", al realizar esto, evidenciamos el siguiente resultado:
+
+<img width="531" height="327" alt="image" src="https://github.com/user-attachments/assets/d9645cd1-da89-4000-b428-0a4b41d8e621" />
+
+4.  Para implementar esta funcionalidad, debemos tener en cuenta los oyentes de los botones y donde vamos a implementar el wait y notifyall:
+Para esto implementamos una variable estática y volátil llamada "pause" dentro de la clase "Galgo" para realizar la verificación que nos permitira detener/reanudar los hilos, para cambiar el estado de "pause" definimos los métodos "stopGalgos" y "playGalgos".
+
+Para implementar el método "notifyall", todos los hilos deben tener un objeto en común para que la sincronización aplique a todos, para eso creamos un objeto llamado "monitorPausa", el cual será pasado al constructor de los Galgos y así realizar la sincronización correctamente, por lo que con aplicar los métodos stop y play Galgos a un único objeto, aplicará para todos los 17 Galgos.
+
+El "notifyall" esta contenido dentro de playGalgos mientras que el "wait" esta contenido dentro del método "corra", toda la sincronización de esta solucion gira entorno a este objeto "monitorPausa" para lograr eficientemente la implementación de estas dos funcionalidades, he aquí una prueba:
+
+Cuando pausamos la carrera:
+
+<img width="1174" height="768" alt="image" src="https://github.com/user-attachments/assets/7ac53d5a-b6c1-491b-9722-6bacdc521230" />
+
+Cuando reanudamos la carrera:
+
+<img width="1175" height="769" alt="image" src="https://github.com/user-attachments/assets/854bc83e-eda7-44a5-8a4e-e4a444d59563" />
+
+Resultado de la carrera:
+
+<img width="958" height="418" alt="image" src="https://github.com/user-attachments/assets/69d93fad-ede8-4b3d-8847-f1df1e693f2e" />
+
+
 
